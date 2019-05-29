@@ -20,8 +20,6 @@
 #define FPS				60.0
 #define SCREEN_W		640
 #define SCREEN_H		480
-#define CUADRADITO_SIZE	32
-#define MOVE_RATE		4.0
 
 
 enum MYKEYS {

@@ -18,7 +18,8 @@ int main(void) {
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_TIMER *timer = NULL;
     ALLEGRO_BITMAP *cuadradito = NULL;
-    bool key_pressed[4] = { false, false, false, false }; //Estado de teclas, true cuando esta apretada
+    bool key_pressed[13] = { false, false, false, false, false, false, false,
+                             false, false, false, false, false, false}; //Estado de teclas, true cuando esta apretada
     bool redraw = false;
     bool do_exit = false;
     
@@ -55,7 +56,25 @@ int main(void) {
                                 
 				if(key_pressed[KEY_T]) 
                                     maskToggle('A', 0xFF);
-
+                                if(key_pressed[KEY_B]) 
+                                    //Handle Blink
+                                if(key_pressed[KEY_0]) 
+                                    bitToggle('A', 0);
+                                if(key_pressed[KEY_1]) 
+                                    bitToggle('A', 1);
+                                if(key_pressed[KEY_2]) 
+                                    bitToggle('A', 2);
+                                if(key_pressed[KEY_3]) 
+                                    bitToggle('A', 3);
+                                if(key_pressed[KEY_4]) 
+                                    bitToggle('A', 4);
+                                if(key_pressed[KEY_5]) 
+                                    bitToggle('A', 5);
+                                if(key_pressed[KEY_6]) 
+                                    bitToggle('A', 6);
+                                if(key_pressed[KEY_7]) 
+                                    bitToggle('A', 7);
+   
 				redraw = true;
 			}
 
@@ -68,17 +87,41 @@ int main(void) {
 					case ALLEGRO_KEY_Q:
 						key_pressed[KEY_Q] = true;
 						break;
-
 					case ALLEGRO_KEY_C:
 						key_pressed[KEY_C] = true;
 						break;
-
 					case ALLEGRO_KEY_S: 
 						key_pressed[KEY_S] = true;
 						break;
-
 					case ALLEGRO_KEY_T:
 						key_pressed[KEY_T] = true;
+						break;
+                                        case ALLEGRO_KEY_B:
+						key_pressed[KEY_B] = true;
+						break;
+                                        case ALLEGRO_KEY_0:
+						key_pressed[KEY_0] = true;
+						break;
+                                        case ALLEGRO_KEY_1:
+						key_pressed[KEY_1] = true;
+						break;
+                                        case ALLEGRO_KEY_2:
+						key_pressed[KEY_2] = true;
+						break;
+                                        case ALLEGRO_KEY_3:
+						key_pressed[KEY_3] = true;
+						break;
+                                        case ALLEGRO_KEY_4:
+						key_pressed[KEY_4] = true;
+						break;
+                                        case ALLEGRO_KEY_5:
+						key_pressed[KEY_5] = true;
+						break;
+                                        case ALLEGRO_KEY_6:
+						key_pressed[KEY_6] = true;
+						break;
+                                        case ALLEGRO_KEY_7:
+						key_pressed[KEY_7] = true;
 						break;
 				}
 			}
@@ -90,17 +133,41 @@ int main(void) {
 					case ALLEGRO_KEY_C:
 						key_pressed[KEY_C] = false;
 						break;
-
 					case ALLEGRO_KEY_S: 
 						key_pressed[KEY_S] = false;
 						break;
-
 					case ALLEGRO_KEY_T:
 						key_pressed[KEY_T] = false;
 						break;
-
 					case ALLEGRO_KEY_Q:
 						do_exit = true;
+						break;
+                                        case ALLEGRO_KEY_B:
+						key_pressed[KEY_B] = false;
+						break;
+                                        case ALLEGRO_KEY_0:
+						key_pressed[KEY_0] = false;
+						break;
+                                        case ALLEGRO_KEY_1:
+						key_pressed[KEY_1] = false;
+						break;
+                                        case ALLEGRO_KEY_2:
+						key_pressed[KEY_2] = false;
+						break;
+                                        case ALLEGRO_KEY_3:
+						key_pressed[KEY_3] = false;
+						break;
+                                        case ALLEGRO_KEY_4:
+						key_pressed[KEY_4] = false;
+						break;
+                                        case ALLEGRO_KEY_5:
+						key_pressed[KEY_5] = false;
+						break;
+                                        case ALLEGRO_KEY_6:
+						key_pressed[KEY_6] = false;
+						break;
+                                        case ALLEGRO_KEY_7:
+						key_pressed[KEY_7] = false;
 						break;
 				}
 			}
