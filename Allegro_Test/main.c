@@ -2,10 +2,14 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "resources.h"
+#include "funbits.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_color.h>
 #include <allegro5/allegro_primitives.h>
 
+#define BYTE    8
+
+static void draw_port();
 /*
  * 
  */
@@ -42,15 +46,15 @@ int main(void) {
 			{
 				if(key_pressed[KEY_Q]) 
                                     al_clear_to_color(al_map_rgb(0,0,0));
-				if(key_pressed[KEY_C]){
-                                    al_draw_filled_circle(320, 240, 50, al_color_name("hotpink"));
-                                    al_clear_to_color(al_map_rgb(0,0,0));
-                                }
+                                
+				if(key_pressed[KEY_C])
+                                    maskOff('A', 0xFF);
+                                
 				if(key_pressed[KEY_S]) 
-                                    al_clear_to_color(al_map_rgb(0,255,0));
-
+                                    maskOn('A', 0xFF);
+                                
 				if(key_pressed[KEY_T]) 
-                                    al_clear_to_color(al_map_rgb(0,0,255));
+                                    maskToggle('A', 0xFF);
 
 				redraw = true;
 			}
@@ -105,6 +109,7 @@ int main(void) {
 		if(redraw && al_is_event_queue_empty(event_queue)) 
 		{  
 			redraw = false;
+                        draw_port();
 			al_flip_display();
 		}
 	}
@@ -113,3 +118,14 @@ int main(void) {
     return (EXIT_SUCCESS);
 }
 
+void draw_port(){
+    int i;
+    for(i = 0; i < BYTE; i++){
+        if(bitGet('A', i)){
+            al_draw_filled_circle(50 + (i*30),200,10, al_map_rgb(255,255,255));
+        }
+        else{
+            al_draw_filled_circle(50 + (i*30),200,10, al_map_rgb(0,0,0));
+        }
+    }
+}
