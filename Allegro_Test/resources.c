@@ -18,7 +18,7 @@ int create_resources(ALLEGRO_DISPLAY **display, ALLEGRO_EVENT_QUEUE **event_queu
         fprintf(stderr, "failed to initialize primitives!\n");
         return 0;
     }
-    *timer = al_create_timer(5.0 / FPS);
+    *timer = al_create_timer(1.0 / FPS);
     if(!timer) {
     	fprintf(stderr, "failed to create timer!\n");
 	al_shutdown_primitives_addon();
