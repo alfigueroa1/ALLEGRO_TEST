@@ -1,3 +1,12 @@
+/***************************************************************************//**
+  @file     +main.c+
+  @brief    +FALTA COMENTAR+
+  @author   +Grupo 2: Alejo Figueroa, Olivia de Vincenti, Pablo Gonzalez+
+ ******************************************************************************/
+
+/*******************************************************************************
+ * INCLUDE HEADER FILES
+ ******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -6,40 +15,67 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_color.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_image.h>
 
+/*******************************************************************************
+ * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
+ ******************************************************************************/
 #define BYTE    8
+#define Q_KEY   13
+#define X0  142
+#define SEPARATION  51
+#define RADIUS  10
 
+/*******************************************************************************
+ * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
+ ******************************************************************************/
 static void draw_port();
 static void hide_port();
+
 /*
  * 
  */
+
+/*******************************************************************************
+ *******************************************************************************
+                        GLOBAL FUNCTION DEFINITIONS
+ *******************************************************************************
+ ******************************************************************************/
+
+/*FALTA COMENTAR*/
 int main(void) {
     ALLEGRO_DISPLAY *display = NULL;
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_TIMER *timer = NULL;
-    ALLEGRO_BITMAP *cuadradito = NULL;
+    ALLEGRO_BITMAP *display_background;
+    
     int blynk = 0;
     int blynk_state = -1;
     
-    bool key_pressed[13] = { true, true, true, true, true, true, true,
+    bool key_pressed[Q_KEY] = { true, true, true, true, true, true, true,
                              true, true, true, true, true, true}; //Estado de teclas, true cuando esta apretada
     bool redraw = false;
     bool do_exit = false;
     
     
-    if(!create_resources(&display, &event_queue, &timer))
+    if(!create_resources(&display, &event_queue, &timer, &display_background))
         return -1;
     
     
     al_set_target_bitmap(al_get_backbuffer(display));
     al_clear_to_color(al_map_rgb(255, 255, 255));
     
+     
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
     al_register_event_source(event_queue, al_get_keyboard_event_source()); //REGISTRAMOS EL TECLADO
 
     al_clear_to_color(al_map_rgb(255, 255, 255));
+    al_draw_scaled_bitmap(display_background,
+					0,0, al_get_bitmap_width(display_background),al_get_bitmap_height(display_background), //imagen
+					0,0,al_get_display_width(display),al_get_display_height(display), //a que tamaño queres que se dibuje la imagen
+					0); //SIn flags podrian usar ALLEGRO_FLIP_HORIZONTAL o ALLEGRO_FLIP_VERTICAL muy utiles
+
     al_flip_display();
     al_start_timer(timer);
     
@@ -185,10 +221,15 @@ int main(void) {
 		{  
 			redraw = false;
                         al_clear_to_color(al_map_rgb(255, 255, 255));
+                        al_draw_scaled_bitmap(display_background,
+					0,0, al_get_bitmap_width(display_background),al_get_bitmap_height(display_background), //imagen
+					0,0,al_get_display_width(display),al_get_display_height(display), //a que tamaño queres que se dibuje la imagen
+					0);
                         if(blynk_state == 1)
                             hide_port();
                         else
                             draw_port();
+                        
 			al_flip_display();
 		}
 	}
@@ -197,33 +238,32 @@ int main(void) {
     return (EXIT_SUCCESS);
 }
 
+/*******************************************************************************
+ *******************************************************************************
+                        LOCAL FUNCTION DEFINITIONS
+ *******************************************************************************
+ ******************************************************************************/
+
+/*FALTA COMENTAR Y PERDI*/
 static void draw_port(){
     int i;
     for(i = 0; i < BYTE; i++){
         if(bitGet('A', i)){
-            al_draw_filled_circle(50 + (i*30),200,10, al_map_rgb(255,0,0));
+            al_draw_filled_circle(X0 + (i*SEPARATION),SCREEN_H/2,RADIUS, al_map_rgb(255,0,0));
         }
         else{
-            al_draw_filled_circle(50 + (i*30),200,10, al_map_rgb(0,0,0));
+            al_draw_filled_circle(X0 + (i*SEPARATION),SCREEN_H/2,RADIUS, al_map_rgb(0,0,0));
         }
     }
 }
 
+/*FALTA COMENTAR*/
 static void hide_port(){
     int i;
     for(i = 0; i < BYTE; i++){
-        al_draw_filled_circle(50 + (i*30),200,10, al_map_rgb(0,0,0));
+        al_draw_filled_circle(X0 + (i*SEPARATION),SCREEN_H/2,RADIUS, al_map_rgb(0,0,0));
     }
 }
-void handle_blynk(){
-    int i;
-    for(i = 0; i < BYTE; i++){
-        if(bitGet('A', i)){
-            al_draw_filled_circle(50 + (i*30),200,10, al_map_rgb(255,0,0));
-        }
-        else{
-            al_draw_filled_circle(50 + (i*30),200,10, al_map_rgb(0,0,0));
-        }
-    }
-    return;
-}
+
+/*******************************************************************************
+ ******************************************************************************/

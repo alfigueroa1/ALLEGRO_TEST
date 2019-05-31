@@ -60,6 +60,9 @@
             <linkerOptionItem>`pkg-config --libs allegro_physfs-5.0`</linkerOptionItem>
             <linkerOptionItem>`pkg-config --libs allegro_primitives-5.0`</linkerOptionItem>
             <linkerOptionItem>`pkg-config --libs allegro_ttf-5.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs adwaita-icon-theme`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs adwaita-icon-theme`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs allegro-5.0`</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
