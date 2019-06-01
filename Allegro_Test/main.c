@@ -1,6 +1,6 @@
 /***************************************************************************//**
   @file     +main.c+
-  @brief    +FALTA COMENTAR+
+  @brief    +VIsualizador grafico del PORTA+
   @author   +Grupo 2: Alejo Figueroa, Olivia de Vincenti, Pablo Gonzalez+
  ******************************************************************************/
 
@@ -20,38 +20,33 @@
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
-#define BYTE    8
-#define Q_KEY   13
-#define X0  142
-#define SEPARATION  51
-#define RADIUS  10
+#define BYTE    8           //Bits en un byte
+#define Q_KEY   13          //Cantidad de teclas a tener en cuenta.
+#define X0  142             //Punto inicial desde el que se dibuja el puerto.
+#define SEPARATION  51      //Separacion entre cada LED.
+#define RADIUS  10          //Radio de cada LED.
 
 /*******************************************************************************
  * FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/
 static void draw_port();
 static void hide_port();
-
-/*
- * 
- */
-
 /*******************************************************************************
  *******************************************************************************
                         GLOBAL FUNCTION DEFINITIONS
  *******************************************************************************
  ******************************************************************************/
 
-/*FALTA COMENTAR*/
 int main(void) {
+    //Declaracion de recursos utilizados.
     ALLEGRO_DISPLAY *display = NULL;
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
     ALLEGRO_TIMER *timer = NULL;
-    ALLEGRO_BITMAP *display_background;
-    
+    ALLEGRO_BITMAP *display_background = NULL;
+    //Variables para el manejo del parpadeo.
     int blynk = 0;
     int blynk_state = -1;
-    
+    //Flags para la FSM.
     bool key_pressed[Q_KEY] = { true, true, true, true, true, true, true,
                              true, true, true, true, true, true}; //Estado de teclas, true cuando esta apretada
     bool redraw = false;
@@ -59,57 +54,57 @@ int main(void) {
     
     
     if(!create_resources(&display, &event_queue, &timer, &display_background))
-        return -1;
+        return -1;  //Se crean los recursos necesarios y se termina el programa si hay fallos.
     
     
-    al_set_target_bitmap(al_get_backbuffer(display));
+    al_set_target_bitmap(al_get_backbuffer(display));   //Se trabajan los dibujos sobre el display.
     al_clear_to_color(al_map_rgb(255, 255, 255));
     
      
-    al_register_event_source(event_queue, al_get_display_event_source(display));
-    al_register_event_source(event_queue, al_get_timer_event_source(timer));
-    al_register_event_source(event_queue, al_get_keyboard_event_source()); //REGISTRAMOS EL TECLADO
+    al_register_event_source(event_queue, al_get_display_event_source(display));    //Se registra el display
+    al_register_event_source(event_queue, al_get_timer_event_source(timer));        //Se registra el timer
+    al_register_event_source(event_queue, al_get_keyboard_event_source());          //Se registra el teclado
 
     al_clear_to_color(al_map_rgb(255, 255, 255));
     al_draw_scaled_bitmap(display_background,
 					0,0, al_get_bitmap_width(display_background),al_get_bitmap_height(display_background), //imagen
 					0,0,al_get_display_width(display),al_get_display_height(display), //a que tamaño queres que se dibuje la imagen
-					0); //SIn flags podrian usar ALLEGRO_FLIP_HORIZONTAL o ALLEGRO_FLIP_VERTICAL muy utiles
-
-    al_flip_display();
-    al_start_timer(timer);
+					0); //Se carga el fondo.
     
-    while(!do_exit)
+    al_flip_display();          //Se dibuja por primera vez el display.
+    al_start_timer(timer);      //Se inicia el timer.
+    
+    while(!do_exit)     //Se repite la FSM mientras no se pida salir del programa.
 	{
 		ALLEGRO_EVENT ev;
-		if( al_get_next_event(event_queue, &ev) ) //Toma un evento de la cola, VER RETURN EN DOCUMENT.
+		if( al_get_next_event(event_queue, &ev) ) //Toma un evento de la cola.
 		{ 
 			if(ev.type == ALLEGRO_EVENT_TIMER) 
 			{
 				if(key_pressed[KEY_Q]) 
                                     al_clear_to_color(al_map_rgb(0,0,0));
-                                if(blynk_state == 1){
+                                if(blynk_state == 1){           //Se cambia el estado del parpadeo cada segundo.
                                     blynk ++;   
-                                    if(blynk == 60){
+                                    if(blynk == 100){
                                         blynk = 0;
                                         blynk_state = 2;
                                     }
                                 }
-                                else if(blynk_state == 2){
+                                else if(blynk_state == 2){      //Se cambia el estado del parpadeo cada segundo.
                                     blynk ++;   
-                                    if(blynk == 60){
+                                    if(blynk == 100){
                                         blynk = 0;
                                         blynk_state = 1;
                                     }
                                 }
-				redraw = true;
+				redraw = true;      //Cada vez que se detecte el evento del timer, se vuelve a dibujar el display
 			}
 
 			else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
-				do_exit = true;
+				do_exit = true;                     //Si se cierra el display, el programa termina.
 
-			else if(ev.type == ALLEGRO_EVENT_KEY_DOWN) 
-			{
+			else if(ev.type == ALLEGRO_EVENT_KEY_DOWN)  //Cuando se presiona una tecla, se activa su funcion.
+			{                                           //Siempre que no se registre multiples veces.
 				switch(ev.keyboard.keycode){
 					case ALLEGRO_KEY_Q:
 						key_pressed[KEY_Q] = true;
@@ -170,8 +165,8 @@ int main(void) {
 				}
 			}
                        
-			else if(ev.type == ALLEGRO_EVENT_KEY_UP) 
-			{
+			else if(ev.type == ALLEGRO_EVENT_KEY_UP)    //Si se suelta alguna tecla.
+			{                                           //Se refrescan los flags de las teclas.
 				switch(ev.keyboard.keycode) {
 
 					case ALLEGRO_KEY_C:
@@ -217,24 +212,24 @@ int main(void) {
 			}
 		}
  
-		if(redraw && al_is_event_queue_empty(event_queue)) 
-		{  
-			redraw = false;
+		if(redraw && al_is_event_queue_empty(event_queue))  //Cuando no hay mas eventos para resolver.
+		{                                                   //Se dibuja el display 60 veces por segundo.
+			redraw = false;                             //SE deshabilita el flag para volver a dibujar.
                         al_clear_to_color(al_map_rgb(255, 255, 255));
-                        al_draw_scaled_bitmap(display_background,
-					0,0, al_get_bitmap_width(display_background),al_get_bitmap_height(display_background), //imagen
-					0,0,al_get_display_width(display),al_get_display_height(display), //a que tamaño queres que se dibuje la imagen
+                        al_draw_scaled_bitmap(display_background,   //Se coloca la imagen de fondo.
+					0,0, al_get_bitmap_width(display_background),al_get_bitmap_height(display_background),
+					0,0,al_get_display_width(display),al_get_display_height(display),
 					0);
-                        if(blynk_state == 1)
-                            hide_port();
+                        if(blynk_state == 1)                        //Si el sistema esta parpadeando.
+                            hide_port();                            //Se esconde el puerto.
                         else
-                            draw_port();
+                            draw_port();                            //Si no, se lo muestra.
                         
-			al_flip_display();
+			al_flip_display();                          //Se refresca el display.
 		}
 	}
     
-    destroy_resources(&display, &event_queue,&timer);
+    destroy_resources(&display, &event_queue, &timer, &display_background);       //Cuando se sale del programa, se destruyen los recursos usados.
     return (EXIT_SUCCESS);
 }
 
@@ -244,20 +239,22 @@ int main(void) {
  *******************************************************************************
  ******************************************************************************/
 
-/*FALTA COMENTAR Y PERDI*/
+/*Esta funcion no toma ningun parametro de entrada
+  Imprime en el bitmap el puerto A tal y como esta guardado.*/
 static void draw_port(){
     int i;
-    for(i = 0; i < BYTE; i++){
-        if(bitGet('A', i)){
+    for(i = 0; i < BYTE; i++){              //Se itera por el puerto.
+        if(bitGet('A', i)){                 //Se analiza el bit y se lo muestra rojo si esta prendido.
             al_draw_filled_circle(X0 + (i*SEPARATION),SCREEN_H/2,RADIUS, al_map_rgb(255,0,0));
         }
-        else{
+        else{                               //Si esta apagado, se lo pinta de negro.
             al_draw_filled_circle(X0 + (i*SEPARATION),SCREEN_H/2,RADIUS, al_map_rgb(0,0,0));
         }
     }
 }
 
-/*FALTA COMENTAR*/
+/*Esta funcion no toma ningun parametro de entrada
+  Imprime en el bitmap el puerto A apagado*/
 static void hide_port(){
     int i;
     for(i = 0; i < BYTE; i++){

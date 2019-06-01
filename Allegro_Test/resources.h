@@ -33,11 +33,11 @@ enum MYKEYS {
  * FUNCTION PROTOTYPES WITH GLOBAL SCOPE
  ******************************************************************************/
 
-/*FALTA COMENTAR*/
+/*Esta funcion toma como parametros los recursos utilizados en el programa, los crea, y destruye todo si no puede crearse algo*/
 int create_resources(ALLEGRO_DISPLAY **display, ALLEGRO_EVENT_QUEUE **event_queue, ALLEGRO_TIMER **timer, ALLEGRO_BITMAP **display_background);
 
-/*FALTA COMENTAR*/
-void destroy_resources(ALLEGRO_DISPLAY **display, ALLEGRO_EVENT_QUEUE **event_queue, ALLEGRO_TIMER **timer);
+/*Esta funcion toma como parametros los recursos utilizados en el programa, y los destruye*/
+void destroy_resources(ALLEGRO_DISPLAY **display, ALLEGRO_EVENT_QUEUE **event_queue, ALLEGRO_TIMER **timer, ALLEGRO_BITMAP **display_background);
 
 #endif /* RESOURCES_H */
 
